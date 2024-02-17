@@ -5,10 +5,12 @@ import Register from "./components/Register";
 import CardList from "./components/CardList";
 import TradeList from "./components/TradeList";
 import TradeForm from "./components/TradeForm";
+import NavBar from "./components/NavBar";
 
 const App: React.FC = () => {
   return (
     <Router>
+      <NavBar />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
