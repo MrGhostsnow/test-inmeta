@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   ContainerLogin,
   SectionFormLogin,
@@ -13,6 +13,8 @@ import {
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,8 +46,12 @@ const Login: React.FC = () => {
 
       // Armazenar o token JWT no localStorage para autenticação futura
       localStorage.setItem("jwtToken", token);
+
+      // Redirecionar o usuário para a página de perfil após o login bem-sucedido
+      navigate("/profile");
     } catch (error) {
       console.error("Login failed:", error);
+      setError("Failed to login. Please check your credentials and try again.");
     }
   };
 
@@ -53,6 +59,7 @@ const Login: React.FC = () => {
     <ContainerLogin>
       <SectionFormLogin>
         <TitleLogin>Login</TitleLogin>
+        {error && <p>{error}</p>}
         <FormLogin onSubmit={handleLogin}>
           <ContainerForm>
             <InputLogin

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   ContainerRegister,
   SectionFormRegister,
@@ -13,6 +13,8 @@ const Register: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,14 +35,18 @@ const Register: React.FC = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Registration failed");
+        throw new Error("Failed to register user");
       }
 
       const data = await response.json();
       const userId = data.userId;
       console.log("Registration successful, userId:", userId);
+
+      // Redirecionar para a página de perfil após o registro bem-sucedido
+      navigate("/profile");
     } catch (error) {
       console.error("Registration failed:", error);
+      setError("Failed to register user. Please try again later.");
     }
   };
 
@@ -48,6 +54,7 @@ const Register: React.FC = () => {
     <ContainerRegister>
       <SectionFormRegister>
         <TitleRegister>Register</TitleRegister>
+        {error && <p>{error}</p>}
         <FormRegister onSubmit={handleRegister}>
           <InputRegister
             type="text"
