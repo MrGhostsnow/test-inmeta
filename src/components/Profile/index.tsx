@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import {
+  ContainerCards,
+  TitleCards,
+  SectionCards,
+  Card,
+  ImageCard,
+  NameCard,
+  DescriptionCard,
+} from "./styles";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<any>(null);
+  const [cards, setCards] = useState<any[]>([]); // Adicione o estado para os cartões do usuário
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -24,6 +36,9 @@ const Profile: React.FC = () => {
           { headers }
         );
         setUser(response.data);
+
+        // Defina os cartões do usuário no estado
+        setCards(response.data.cards);
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
@@ -41,15 +56,29 @@ const Profile: React.FC = () => {
           <h3>Name: {user.name}</h3>
           <p>Email: {user.email}</p>
           <h4>Owned Cards:</h4>
-          <div>
-            {user.cards.map((card: any) => (
-              <div key={card.id}>
-                <h5>{card.name}</h5>
-                <p>{card.description}</p>
-                <img src={card.imageUrl} alt={card.name} />
-              </div>
-            ))}
-          </div>
+          {cards.length > 0 ? (
+            <ContainerCards>
+              <SectionCards>
+                {cards.map((card) => (
+                  <Card key={card.id}>
+                    <ImageCard src={card.imageUrl} alt={card.name} />
+                    <NameCard>{card.name}</NameCard>
+                    <DescriptionCard>{card.description}</DescriptionCard>
+                  </Card>
+                ))}
+              </SectionCards>
+            </ContainerCards>
+          ) : (
+            <>
+              <p>
+                Seu deck está vazio <br />
+                Clique no botão abaixo para adicionar cartas
+              </p>
+              <button onClick={() => navigate("/cards")}>
+                Adicionar Cartas
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>

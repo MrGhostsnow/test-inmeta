@@ -1,8 +1,4 @@
-import styled from 'styled-components';
-
-interface SelectButtonProps {
-    selected: boolean;
-  }
+import styled from "styled-components";
 
 export const ContainerCards = styled.div`
     display: flex;
@@ -47,9 +43,3 @@ export const DescriptionCard = styled.p`
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
 `;
-
-export const SelectCheckbox = styled.input``;
-
-export const FinishButton = styled.button``;
-
-
