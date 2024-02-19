@@ -46,25 +46,18 @@ box-shadow: inset 0 0 0 0 ;
 -webkit-transition: ease-out 0.4s;
 -moz-transition: ease-out 0.4s;
 transition: ease-out 0.4s;
-font-size: 15px;
-
 `;
 
 export const ButtonRegister = styled.button`
-color: #000;
-border: 1px solid ;
-padding: 10px 20px;
-border-radius: 4px;
-display: inline-block;
-font-size: 14px;
-letter-spacing: 1px;
-cursor: pointer;
-box-shadow: inset 0 0 0 0 ;
--webkit-transition: ease-out 0.4s;
--moz-transition: ease-out 0.4s;
-transition: ease-out 0.4s;
-font-size: 15px;
-
+    color: #000;
+    border: none ;
+    background-color: #fff;
+    padding: 10px ;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 20px;
+    letter-spacing: 1px;
+    cursor: pointer;
 
 `;
 

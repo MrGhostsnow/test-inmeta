@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {
+  ContainerTradeList,
+  TitleTradeList,
+  SectionTradeList,
+  SectionCard,
+  SectionTradeCards,
+  SectionUserOption,
+  User,
+  Card,
+  ImageCard,
+  NameCard,
+  DescriptionCard,
+  TradeType,
+  ButtonDelete,
+} from "./styles";
 
 interface Trade {
   id: string;
@@ -25,6 +40,7 @@ interface Trade {
 
 const TradeList: React.FC = () => {
   const [trades, setTrades] = useState<Trade[]>([]);
+  const [currentUserId, setCurrentUserId] = useState<string>("");
 
   useEffect(() => {
     const fetchTrades = async () => {
@@ -33,7 +49,6 @@ const TradeList: React.FC = () => {
           "https://cards-marketplace-api.onrender.com/trades?rpp=10&page=1"
         );
         setTrades(response.data.list);
-        console.log(response.data.list);
       } catch (error) {
         console.error("Error fetching trades:", error);
       }
@@ -41,31 +56,100 @@ const TradeList: React.FC = () => {
     fetchTrades();
   }, []);
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem("jwtToken");
+        if (!token) {
+          throw new Error("JWT token not found in localStorage");
+        }
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const response = await axios.get(
+          "https://cards-marketplace-api.onrender.com/me",
+          { headers }
+        );
+        setCurrentUserId(response.data.id);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+    fetchUserProfile();
+  }, []);
+
+  const handleDeleteTrade = async (tradeId: string) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      if (!token || token.trim() === "") {
+        throw new Error("JWT token not found or empty in localStorage");
+      }
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      const tradeToDelete = trades.find((trade) => trade.id === tradeId);
+      if (!tradeToDelete) {
+        throw new Error("Trade not found");
+      }
+      if (tradeToDelete.userId !== currentUserId) {
+        throw new Error("You are not authorized to delete this trade.");
+      }
+
+      await axios.delete(
+        `https://cards-marketplace-api.onrender.com/trades/${tradeId}`,
+        { headers }
+      );
+
+      console.log("Trade deleted successfully");
+      setTrades((prevTrades) =>
+        prevTrades.filter((trade) => trade.id !== tradeId)
+      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("HTTP Error deleting trade:", error.response?.status);
+      } else {
+        console.error("Error deleting trade:", error);
+      }
+    }
+  };
+
+  console.log(trades);
+
   return (
-    <div>
-      <h2>Trade List</h2>
-      <div>
+    <ContainerTradeList>
+      <TitleTradeList>Trade List</TitleTradeList>
+      <SectionTradeList>
         {trades.map((trade) => (
-          <div key={trade.id}>
-            <h3>User: {trade.user.name}</h3>
-            <p>Created At: {trade.createdAt}</p>
-            <div>
+          <SectionCard key={trade.id}>
+            <SectionUserOption>
+              <User>User: {trade.user.name}</User>
+              {trade.userId === currentUserId && (
+                <ButtonDelete onClick={() => handleDeleteTrade(trade.id)}>
+                  Delete
+                </ButtonDelete>
+              )}
+            </SectionUserOption>
+            <SectionTradeCards>
               {trade.tradeCards.map((tradeCard) => (
-                <div key={tradeCard.id}>
-                  <img
+                <Card key={tradeCard.id}>
+                  <ImageCard
                     src={tradeCard.card.imageUrl}
                     alt={tradeCard.card.name}
                   />
-                  <h4>{tradeCard.card.name}</h4>
-                  <p>{tradeCard.card.description}</p>
-                  <p>Type: {tradeCard.type}</p>
-                </div>
+                  <NameCard>{tradeCard.card.name}</NameCard>
+                  <DescriptionCard>
+                    {tradeCard.card.description}
+                  </DescriptionCard>
+                  <TradeType>Type: {tradeCard.type}</TradeType>
+                </Card>
               ))}
-            </div>
-          </div>
+            </SectionTradeCards>
+          </SectionCard>
         ))}
-      </div>
-    </div>
+      </SectionTradeList>
+    </ContainerTradeList>
   );
 };
 

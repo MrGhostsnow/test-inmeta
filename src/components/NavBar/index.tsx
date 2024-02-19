@@ -7,6 +7,8 @@ import {
   SectionLogo,
   SectionRegister,
 } from "./styles";
+import { CgProfile } from "react-icons/cg";
+import { TbLogout } from "react-icons/tb";
 
 interface ButtonLoginProps {
   href: string;
@@ -26,14 +28,19 @@ const CustomButtonLogin: React.FC<ButtonLoginProps> = ({
   );
 };
 
-const NavBar: React.FC = () => {
-  const handleLogout = () => {
-    // Limpe o token JWT do localStorage
-    localStorage.removeItem("jwtToken");
-    // Redirecione o usuário para a página de login
-    window.location.href = "/login";
-  };
+const CustomButtonRegister: React.FC<ButtonLoginProps> = ({
+  href,
+  onClick,
+  children,
+}) => {
+  return (
+    <a href={href}>
+      <ButtonRegister onClick={onClick}>{children}</ButtonRegister>
+    </a>
+  );
+};
 
+const NavBar: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -43,18 +50,28 @@ const NavBar: React.FC = () => {
     }
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("jwtToken");
+    window.location.href = "/login";
+  };
+
   return (
     <ContainerNav>
       <SectionLogo>
         <a href="/">
-          <h1>Test Inmeta</h1>
+          <h1>Trade Cards</h1>
         </a>
       </SectionLogo>
       <SectionRegister>
         {isLoggedIn ? (
           <>
             <CustomButtonLogin href="/trade-form">Trade</CustomButtonLogin>
-            <ButtonLogin onClick={handleLogout}>Logout</ButtonLogin>
+            <CustomButtonRegister href="/profile">
+              <CgProfile />
+            </CustomButtonRegister>
+            <ButtonRegister onClick={handleLogout}>
+              <TbLogout />
+            </ButtonRegister>
           </>
         ) : (
           <>

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import {
   ContainerProfile,
   SectionProfile,
@@ -65,15 +70,23 @@ const Profile: React.FC = () => {
           <DeckTitle>Owned Cards</DeckTitle>
           {cards.length > 0 ? (
             <ContainerCards>
-              <SectionCards>
-                {cards.map((card) => (
-                  <Card key={card.id}>
-                    <ImageCard src={card.imageUrl} alt={card.name} />
-                    <NameCard>{card.name}</NameCard>
-                    <DescriptionCard>{card.description}</DescriptionCard>
-                  </Card>
-                ))}
-              </SectionCards>
+              <Swiper
+                className="mySwiper"
+                modules={[Pagination, Navigation, Autoplay]}
+                navigation={true}
+              >
+                <SectionCards>
+                  {cards.map((card) => (
+                    <SwiperSlide>
+                      <Card key={card.id}>
+                        <ImageCard src={card.imageUrl} alt={card.name} />
+                        <NameCard>{card.name}</NameCard>
+                        <DescriptionCard>{card.description}</DescriptionCard>
+                      </Card>
+                    </SwiperSlide>
+                  ))}
+                </SectionCards>
+              </Swiper>
             </ContainerCards>
           ) : (
             <SectionEmptyDeck>

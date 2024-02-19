@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import {
   ContainerCards,
   TitleCards,
@@ -93,7 +98,7 @@ const CardList: React.FC = () => {
     <ContainerCards>
       <TitleCards>Card List</TitleCards>
       <SectionChooseCards>
-        <LabelSection>Escolha até 10 cartas para iniciar seu deck</LabelSection>
+        <LabelSection>Choose up to 10 cards to start your deck</LabelSection>
         <FinishButton
           disabled={selectedCards.length < 1}
           onClick={handleFinishSelection}
@@ -108,18 +113,26 @@ const CardList: React.FC = () => {
       ) : (
         <>
           <SectionCards>
-            {cards.map((card) => (
-              <Card key={card.id}>
-                <SelectCheckbox
-                  type="checkbox"
-                  checked={selectedCards.includes(card.id)}
-                  onChange={() => handleCardSelect(card.id)}
-                />
-                <ImageCard src={card.imageUrl} alt={card.name} />
-                <NameCard>{card.name}</NameCard>
-                <DescriptionCard>{card.description}</DescriptionCard>
-              </Card>
-            ))}
+            <Swiper
+              className="mySwiper"
+              modules={[Pagination, Navigation, Autoplay]}
+              navigation={true}
+            >
+              {cards.map((card) => (
+                <SwiperSlide key={card.id}>
+                  <Card key={card.id}>
+                    <SelectCheckbox
+                      type="checkbox"
+                      checked={selectedCards.includes(card.id)}
+                      onChange={() => handleCardSelect(card.id)}
+                    />
+                    <ImageCard src={card.imageUrl} alt={card.name} />
+                    <NameCard>{card.name}</NameCard>
+                    <DescriptionCard>{card.description}</DescriptionCard>
+                  </Card>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </SectionCards>
         </>
       )}

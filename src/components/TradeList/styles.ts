@@ -1,54 +1,39 @@
 import styled from 'styled-components';
 
-interface SelectButtonProps {
-    selected: boolean;
-  }
-
-export const ContainerCards = styled.div`
+export const ContainerTradeList = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 30px;
 `;
 
-export const TitleCards = styled.h2`
+export const TitleTradeList = styled.h1`
     font-family: 'Roboto', sans-serif;
+    font-size: 40px;
 `;
 
-export const SectionChooseCards = styled.section`
-    display: flex;
-    width: 750px;
-    border: 1px solid black;
-    padding: 1rem;
-    background-color: #efedf0;
-    border-radius: 4px;
-    justify-content: space-between;
-    align-items: center;
-`;
-
-export const LabelSection = styled.p`
-    font-family: 'Roboto', sans-serif;
-    font-size: 18px;
-
-`;
-
-export const SectionCards = styled.section`
+export const SectionTradeList = styled.section`
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
-
-    .mySwiper {
-        width: 510px;
-    }
-
-    .swiper-slide {
-        display: flex;
-        justify-content: center;
-    }
+    gap: 3rem;
 `;
+
+export const SectionTradeCards = styled.section`
+    display: flex;
+    gap: 2rem;
+`;
+
+export const SectionCard = styled.section`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const User = styled.p`
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+`;
+
 
 export const Card = styled.div`
     display: flex;
@@ -77,18 +62,29 @@ export const DescriptionCard = styled.p`
     font-size: 14px;
 `;
 
-export const SelectCheckbox = styled.input`
+export const TradeType = styled.p`
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
 `;
 
-export const FinishButton = styled.button`
+export const ButtonDelete = styled.button`
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 15px;
-    height: 40px;
+    height: 30px;
     border-radius: 4px;
     border: 1px solid black;
-    width: 100px;
     cursor: pointer;
 `;
 
-
+export const SectionUserOption = styled.section`
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+    background-color: #efedf0;
+    border-radius: 4px;
+    border: 1px solid black;
+`;

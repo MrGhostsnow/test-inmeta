@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import {
   ContainerTrade,
   TitleContainerTrade,
   ContainerTradeCards,
+  SectionChooseTrade,
   TitleSection,
   Card,
   ImageCard,
@@ -30,6 +37,8 @@ const TradeForm: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserCards = async () => {
@@ -117,6 +126,7 @@ const TradeForm: React.FC = () => {
       );
 
       const tradeId = response.data.tradeId;
+      navigate(`/`);
       console.log("Trade created successfully, tradeId:", tradeId);
     } catch (error) {
       console.error("Error creating trade:", error);
@@ -127,6 +137,16 @@ const TradeForm: React.FC = () => {
 
   const isFormValid =
     offeringCard !== "" && receivingCard !== "" && !isSubmitting && !loading;
+
+  function reduceDescription(description: string) {
+    const limit = 500;
+    if (description.length <= limit) {
+      return description;
+    } else {
+      const ReduceDescription = description.substring(0, limit) + "...";
+      return ReduceDescription;
+    }
+  }
 
   return (
     <ContainerTrade>
@@ -142,44 +162,66 @@ const TradeForm: React.FC = () => {
         <TitleContainerTrade>Create Trade</TitleContainerTrade>
         <SectionWarning>
           <WarningText>
-            Escolha apenas uma carta do seu deck para trocar com apenas uma
-            carta do deck oferecido.
+            Choose 1 card from your deck to exchange with 1 card from the
+            offered deck.
           </WarningText>
           <ButtonCreateTrade type="submit" disabled={!isFormValid}>
             Trocar
           </ButtonCreateTrade>
         </SectionWarning>
-
-        <TitleSection>Seu deck:</TitleSection>
-        <ContainerTradeCards>
-          {cardsUser.map((card) => (
-            <Card key={card.id}>
-              <input
-                type="checkbox"
-                checked={offeringCard === card.id}
-                onChange={() => handleOfferingCardChange(card.id)}
-              />
-              <ImageCard src={card.imageUrl} alt={card.name} />
-              <NameCard>{card.name}</NameCard>
-              <DescriptionCard>{card.description}</DescriptionCard>
-            </Card>
-          ))}
-        </ContainerTradeCards>
-        <TitleSection>Deck do jogo:</TitleSection>
-        <ContainerTradeCards>
-          {cardsGame.map((card) => (
-            <Card key={card.id}>
-              <input
-                type="checkbox"
-                checked={receivingCard === card.id}
-                onChange={() => handleReceivingCardChange(card.id)}
-              />
-              <ImageCard src={card.imageUrl} alt={card.name} />
-              <NameCard>{card.name}</NameCard>
-              <DescriptionCard>{card.description}</DescriptionCard>
-            </Card>
-          ))}
-        </ContainerTradeCards>
+        <SectionChooseTrade>
+          <ContainerTradeCards>
+            <TitleSection>Seu deck</TitleSection>
+            <Swiper
+              className="mySwiper"
+              modules={[Pagination, Navigation, Autoplay]}
+              navigation={true}
+            >
+              {cardsUser.map((card) => (
+                <SwiperSlide key={card.id}>
+                  <Card key={card.id}>
+                    <input
+                      type="checkbox"
+                      checked={offeringCard === card.id}
+                      onChange={() => handleOfferingCardChange(card.id)}
+                    />
+                    <ImageCard src={card.imageUrl} alt={card.name} />
+                    <NameCard>{card.name}</NameCard>
+                    <DescriptionCard>
+                      {" "}
+                      {reduceDescription(card.description)}
+                    </DescriptionCard>
+                  </Card>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </ContainerTradeCards>
+          <ContainerTradeCards>
+            <TitleSection>Deck do jogo</TitleSection>
+            <Swiper
+              className="mySwiper"
+              modules={[Pagination, Navigation, Autoplay]}
+              navigation={true}
+            >
+              {cardsGame.map((card) => (
+                <SwiperSlide key={card.id}>
+                  <Card key={card.id}>
+                    <input
+                      type="checkbox"
+                      checked={receivingCard === card.id}
+                      onChange={() => handleReceivingCardChange(card.id)}
+                    />
+                    <ImageCard src={card.imageUrl} alt={card.name} />
+                    <NameCard>{card.name}</NameCard>
+                    <DescriptionCard>
+                      {reduceDescription(card.description)}
+                    </DescriptionCard>
+                  </Card>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </ContainerTradeCards>
+        </SectionChooseTrade>
       </form>
     </ContainerTrade>
   );

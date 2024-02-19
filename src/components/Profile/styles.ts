@@ -6,6 +6,7 @@ export const ContainerProfile = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
 `;
 
 export const SectionProfile = styled.section`
@@ -13,6 +14,7 @@ export const SectionProfile = styled.section`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 2rem;
 `;
 
 export const SectionInfos = styled.section`
@@ -81,6 +83,15 @@ export const ContainerCards = styled.div`
     align-items: center;
     justify-content: center;
     gap: 30px;
+    
+    .mySwiper {
+        width: 510px;
+    }
+
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+    }
 `;
 
 export const TitleCards = styled.h2`

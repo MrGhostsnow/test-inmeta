@@ -8,6 +8,12 @@ export const ContainerTrade = styled.div`
 
 `;
 
+export const SectionChooseTrade = styled.section`
+    display: flex;
+    height: auto;
+    gap: 30px;
+`;
+
 export const TitleContainerTrade = styled.h1`
     font-family: 'Roboto', sans-serif;
     font-size: 30px;
@@ -15,15 +21,25 @@ export const TitleContainerTrade = styled.h1`
 `;
 
 export const ContainerTradeCards = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 30px;
+
+    .mySwiper {
+        width: 510px;
+    }
+
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+    }
 `;
 
 export const TitleSection = styled.h2`
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
-    margin-bottom: 10px;
 `;
 
 export const ButtonCreateTrade = styled.button`
@@ -46,6 +62,7 @@ export const Card = styled.div`
     border: 1px solid black;
     border-radius: 4px;
     width: 350px;
+    max-height: 550px;
     padding: 20px;
     gap: 10px;
 `;
