@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {
+  ContainerTrade,
+  TitleContainerTrade,
+  ContainerTradeCards,
+  TitleSection,
+  Card,
+  ImageCard,
+  NameCard,
+  DescriptionCard,
+  ButtonCreateTrade,
+  SectionWarning,
+  WarningText,
+} from "./styles";
 
 interface Card {
   id: string;
@@ -73,11 +86,36 @@ const TradeForm: React.FC = () => {
   const handleTradeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
     try {
-      const response = await axios.post("/trades", {
-        offeringCard,
-        receivingCard,
-      });
+      const token = localStorage.getItem("jwtToken");
+      if (!token) {
+        throw new Error("JWT token not found in localStorage");
+      }
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      const requestBody = {
+        cards: [
+          {
+            cardId: offeringCard,
+            type: "OFFERING",
+          },
+          {
+            cardId: receivingCard,
+            type: "RECEIVING",
+          },
+        ],
+      };
+
+      const response = await axios.post(
+        "https://cards-marketplace-api.onrender.com/trades",
+        requestBody,
+        { headers }
+      );
+
       const tradeId = response.data.tradeId;
       console.log("Trade created successfully, tradeId:", tradeId);
     } catch (error) {
@@ -91,48 +129,59 @@ const TradeForm: React.FC = () => {
     offeringCard !== "" && receivingCard !== "" && !isSubmitting && !loading;
 
   return (
-    <div>
-      <h2>Create Trade</h2>
-      <form onSubmit={handleTradeSubmit}>
-        <div>
-          <h3>Offering Card:</h3>
+    <ContainerTrade>
+      <form
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        onSubmit={handleTradeSubmit}
+      >
+        <TitleContainerTrade>Create Trade</TitleContainerTrade>
+        <SectionWarning>
+          <WarningText>
+            Escolha apenas uma carta do seu deck para trocar com apenas uma
+            carta do deck oferecido.
+          </WarningText>
+          <ButtonCreateTrade type="submit" disabled={!isFormValid}>
+            Trocar
+          </ButtonCreateTrade>
+        </SectionWarning>
+
+        <TitleSection>Seu deck:</TitleSection>
+        <ContainerTradeCards>
           {cardsUser.map((card) => (
-            <div key={card.id}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={offeringCard === card.id}
-                  onChange={() => handleOfferingCardChange(card.id)}
-                />
-                <img src={card.imageUrl} alt={card.name} />
-                <div>{card.name}</div>
-                <div>{card.description}</div>
-              </label>
-            </div>
+            <Card key={card.id}>
+              <input
+                type="checkbox"
+                checked={offeringCard === card.id}
+                onChange={() => handleOfferingCardChange(card.id)}
+              />
+              <ImageCard src={card.imageUrl} alt={card.name} />
+              <NameCard>{card.name}</NameCard>
+              <DescriptionCard>{card.description}</DescriptionCard>
+            </Card>
           ))}
-        </div>
-        <div>
-          <h3>Receiving Card:</h3>
+        </ContainerTradeCards>
+        <TitleSection>Deck do jogo:</TitleSection>
+        <ContainerTradeCards>
           {cardsGame.map((card) => (
-            <div key={card.id}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={receivingCard === card.id}
-                  onChange={() => handleReceivingCardChange(card.id)}
-                />
-                <img src={card.imageUrl} alt={card.name} />
-                <div>{card.name}</div>
-                <div>{card.description}</div>
-              </label>
-            </div>
+            <Card key={card.id}>
+              <input
+                type="checkbox"
+                checked={receivingCard === card.id}
+                onChange={() => handleReceivingCardChange(card.id)}
+              />
+              <ImageCard src={card.imageUrl} alt={card.name} />
+              <NameCard>{card.name}</NameCard>
+              <DescriptionCard>{card.description}</DescriptionCard>
+            </Card>
           ))}
-        </div>
-        <button type="submit" disabled={!isFormValid}>
-          Create Trade
-        </button>
+        </ContainerTradeCards>
       </form>
-    </div>
+    </ContainerTrade>
   );
 };
 

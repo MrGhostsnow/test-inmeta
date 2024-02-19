@@ -16,6 +16,23 @@ export const TitleCards = styled.h2`
     font-family: 'Roboto', sans-serif;
 `;
 
+export const SectionChooseCards = styled.section`
+    display: flex;
+    width: 750px;
+    border: 1px solid black;
+    padding: 1rem;
+    background-color: #efedf0;
+    border-radius: 4px;
+    justify-content: space-between;
+    align-items: center;
+`;
+
+export const LabelSection = styled.p`
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+
+`;
+
 export const SectionCards = styled.section`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -31,6 +48,7 @@ export const Card = styled.div`
     border-radius: 4px;
     width: 350px;
     padding: 20px;
+    gap: 10px;
 `;
 
 export const ImageCard = styled.img`
@@ -48,8 +66,18 @@ export const DescriptionCard = styled.p`
     font-size: 14px;
 `;
 
-export const SelectCheckbox = styled.input``;
+export const SelectCheckbox = styled.input`
+`;
 
-export const FinishButton = styled.button``;
+export const FinishButton = styled.button`
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid black;
+    width: 100px;
+    cursor: pointer;
+`;
 
 

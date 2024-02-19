@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Pagination from "../Pagination";
 import {
   ContainerCards,
   TitleCards,
+  SectionChooseCards,
+  LabelSection,
   SectionCards,
   Card,
   ImageCard,
   NameCard,
   DescriptionCard,
-  SelectCheckbox, // Adicionando um checkbox para seleção
-  FinishButton, // Adicionando um botão para finalizar a escolha
+  SelectCheckbox,
+  FinishButton,
 } from "./styles";
 
 interface Card {
@@ -25,29 +26,19 @@ const CardList: React.FC = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(
+    Math.floor(Math.random() * 15) + 1
+  );
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
   const navigate = useNavigate(); // Obtenha a função de navegação
 
-  useEffect(() => {
-    const randomNumber = Math.floor(Math.random() * 15) + 1;
-    console.log(randomNumber); // Exibe o número aleatório gerado
-    fetchData(randomNumber); // Chama a função fetchData com o número aleatório gerado
-  }, []);
-
-  useEffect(() => {
-    fetchData(currentPage); // Chama a função fetchData sempre que a página atual mudar
-  }, [currentPage]);
-
-  const fetchData = async (pageNumber: number) => {
+  const fetchData = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `https://cards-marketplace-api.onrender.com/cards?rpp=10&page=${pageNumber}`
+        `https://cards-marketplace-api.onrender.com/cards?rpp=10&page=${currentPage}`
       );
       setCards(response.data.list);
-      setTotalPages(Math.ceil(response.data.total / 10));
       setLoading(false);
     } catch (error) {
       console.error("Error fetching cards:", error);
@@ -56,9 +47,9 @@ const CardList: React.FC = () => {
     }
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  useEffect(() => {
+    fetchData();
+  }, [currentPage]);
 
   const handleCardSelect = (id: string) => {
     if (selectedCards.includes(id)) {
@@ -101,6 +92,15 @@ const CardList: React.FC = () => {
   return (
     <ContainerCards>
       <TitleCards>Card List</TitleCards>
+      <SectionChooseCards>
+        <LabelSection>Escolha até 10 cartas para iniciar seu deck</LabelSection>
+        <FinishButton
+          disabled={selectedCards.length < 1}
+          onClick={handleFinishSelection}
+        >
+          Finalizar
+        </FinishButton>
+      </SectionChooseCards>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -110,25 +110,17 @@ const CardList: React.FC = () => {
           <SectionCards>
             {cards.map((card) => (
               <Card key={card.id}>
-                <ImageCard src={card.imageUrl} alt={card.name} />
-                <NameCard>{card.name}</NameCard>
-                <DescriptionCard>{card.description}</DescriptionCard>
                 <SelectCheckbox
                   type="checkbox"
                   checked={selectedCards.includes(card.id)}
                   onChange={() => handleCardSelect(card.id)}
                 />
+                <ImageCard src={card.imageUrl} alt={card.name} />
+                <NameCard>{card.name}</NameCard>
+                <DescriptionCard>{card.description}</DescriptionCard>
               </Card>
             ))}
           </SectionCards>
-          <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-          <FinishButton onClick={handleFinishSelection}>
-            Finish Selection
-          </FinishButton>
         </>
       )}
     </ContainerCards>

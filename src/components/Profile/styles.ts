@@ -1,5 +1,80 @@
 import styled from "styled-components";
 
+
+export const ContainerProfile = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const SectionProfile = styled.section`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const SectionInfos = styled.section`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 550px;
+    border: 1px solid black;
+    padding: 1rem;
+    background-color: #efedf0;
+    border-radius: 4px;
+`;
+
+export const TitleProfilePage = styled.h1`
+    font-family: 'Roboto', sans-serif;
+`;
+
+export const UserName = styled.p`
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+`;
+
+export const UserEmail = styled.p`
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+`;
+
+export const DeckTitle = styled.h2`
+    font-family: 'Roboto', sans-serif;
+`;
+
+export const SectionEmptyDeck = styled.section`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 1rem;
+    background-color: #efedf0;
+    gap: 1rem;
+`;
+
+export const LabelEmptyDeck = styled.p`
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    font-size: 20px;
+`;
+
+export const ButtonAddCards = styled.button`
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 1rem;
+    cursor: pointer;
+`;
+
+
 export const ContainerCards = styled.div`
     display: flex;
     flex-direction: column;

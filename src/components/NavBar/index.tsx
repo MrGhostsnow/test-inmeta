@@ -1,3 +1,5 @@
+import React from "react";
+import { useState, useEffect } from "react";
 import {
   ButtonLogin,
   ButtonRegister,
@@ -5,6 +7,24 @@ import {
   SectionLogo,
   SectionRegister,
 } from "./styles";
+
+interface ButtonLoginProps {
+  href: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+
+const CustomButtonLogin: React.FC<ButtonLoginProps> = ({
+  href,
+  onClick,
+  children,
+}) => {
+  return (
+    <a href={href}>
+      <ButtonLogin onClick={onClick}>{children}</ButtonLogin>
+    </a>
+  );
+};
 
 const NavBar: React.FC = () => {
   const handleLogout = () => {
@@ -14,6 +34,15 @@ const NavBar: React.FC = () => {
     window.location.href = "/login";
   };
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   return (
     <ContainerNav>
       <SectionLogo>
@@ -22,15 +51,17 @@ const NavBar: React.FC = () => {
         </a>
       </SectionLogo>
       <SectionRegister>
-        <a href="/login">
-          <ButtonLogin>Login</ButtonLogin>
-        </a>
-        <a href="/login">
-          <ButtonLogin onClick={handleLogout}>Logout</ButtonLogin>
-        </a>
-        <a href="/register">
-          <ButtonRegister>Register</ButtonRegister>
-        </a>
+        {isLoggedIn ? (
+          <>
+            <CustomButtonLogin href="/trade-form">Trade</CustomButtonLogin>
+            <ButtonLogin onClick={handleLogout}>Logout</ButtonLogin>
+          </>
+        ) : (
+          <>
+            <CustomButtonLogin href="/login">Login</CustomButtonLogin>
+            <CustomButtonLogin href="/register">Register</CustomButtonLogin>
+          </>
+        )}
       </SectionRegister>
     </ContainerNav>
   );
