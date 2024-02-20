@@ -25,7 +25,7 @@ const Register: React.FC = () => {
       navigate("/login");
     } catch (error) {
       console.error("Registration failed:", error);
-      setError("Failed to register user. Please try again later.");
+      setError("Failed to register user. Please try again.");
     }
   };
 
@@ -63,8 +63,8 @@ const Register: React.FC = () => {
           />
           <ButtonRegister type="submit">Register</ButtonRegister>
         </FormRegister>
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </SectionFormRegister>
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </ContainerRegister>
   );
 };
