@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   ButtonLogin,
   ButtonRegister,
@@ -9,6 +9,7 @@ import {
 } from "./styles";
 import { CgProfile } from "react-icons/cg";
 import { TbLogout } from "react-icons/tb";
+import { AuthContext } from "../../contexts/auth";
 
 interface ButtonLoginProps {
   href: string;
@@ -41,7 +42,12 @@ const CustomButtonRegister: React.FC<ButtonLoginProps> = ({
 };
 
 const NavBar: React.FC = () => {
+  const { isAuthenticated } = useContext(AuthContext);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(isAuthenticated);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");

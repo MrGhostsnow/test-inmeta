@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ContainerLogin,
@@ -10,18 +10,21 @@ import {
   ButtonLogin,
 } from "./styles";
 import { login } from "../../api/loginApi";
+import { AuthContext } from "../../contexts/auth";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
   const navigate = useNavigate();
+  const { setIsAuthenticated } = useContext(AuthContext);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const token = await login(email, password);
       localStorage.setItem("jwtToken", token);
+      setIsAuthenticated(true);
       navigate("/profile");
     } catch (error) {
       console.error("Login failed:", error);
