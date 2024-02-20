@@ -12,6 +12,10 @@ export const SectionChooseTrade = styled.section`
     display: flex;
     height: auto;
     gap: 30px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 `;
 
 export const TitleContainerTrade = styled.h1`
@@ -29,6 +33,9 @@ export const ContainerTradeCards = styled.div`
 
     .mySwiper {
         width: 510px;
+        @media (max-width: 425px) {
+            width: 400px;
+        }
     }
 
     .swiper-slide {
@@ -93,9 +100,21 @@ export const SectionWarning = styled.section`
     border-radius: 4px;
     justify-content: space-between;
     align-items: center;
+
+    @media (max-width: 768px) {
+        width: 500px;
+    }
+
+    @media (max-width: 425px) {
+        width: 300px;
+    }
 `;
 
 export const WarningText = styled.p`
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
+
+    @media (max-width: 768px) {
+        text-align: center;
+    }
 `;

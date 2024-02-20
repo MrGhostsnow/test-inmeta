@@ -18,6 +18,10 @@ export const SectionFormLogin = styled.section`
     border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     background-color: #efedf0;
+
+    @media (max-width: 425px) {
+        width: 300px;
+    }
 `;
 
 export const TitleLogin = styled.h2`
@@ -51,7 +55,7 @@ export const InputLogin = styled.input`
 
 export const ButtonLogin = styled.button`
     width: 100px;
-    height: 20px;
+    height: 30px;
     border-radius: 4px;
     border: 1px solid;
     cursor: pointer;

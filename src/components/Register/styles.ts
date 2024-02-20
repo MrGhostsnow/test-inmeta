@@ -18,6 +18,10 @@ export const SectionFormRegister = styled.section`
     border-radius: 4px;
     background-color:#efedf0;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+    @media (max-width: 425px) {
+        width: 300px;
+    }
 `;
 
 export const TitleRegister = styled.h2`
@@ -51,7 +55,7 @@ export const InputRegister = styled.input`
 
 export const ButtonRegister = styled.button`
     width: 100px;
-    height: 20px;
+    height: 30px;
     border-radius: 4px;
     border: 1px solid;
     cursor: pointer;

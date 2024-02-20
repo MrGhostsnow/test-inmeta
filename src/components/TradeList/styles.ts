@@ -21,6 +21,10 @@ export const SectionTradeList = styled.section`
 export const SectionTradeCards = styled.section`
     display: flex;
     gap: 2rem;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 `;
 
 export const SectionCard = styled.section`

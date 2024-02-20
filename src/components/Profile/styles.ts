@@ -26,6 +26,10 @@ export const SectionInfos = styled.section`
     padding: 1rem;
     background-color: #efedf0;
     border-radius: 4px;
+
+    @media (max-width: 425px) {
+        width: 300px;
+    }
 `;
 
 export const TitleProfilePage = styled.h1`
@@ -86,6 +90,9 @@ export const ContainerCards = styled.div`
     
     .mySwiper {
         width: 510px;
+        @media (max-width: 425px) {
+            width: 400px;
+        }
     }
 
     .swiper-slide {

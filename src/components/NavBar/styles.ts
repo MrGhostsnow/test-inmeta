@@ -8,6 +8,11 @@ export const ContainerNav = styled.nav`
     height: 100px;
     width: 100%;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+    @media (max-width: 425px) {
+        justify-content: center;
+        gap:25px;
+    }
 `;
 
 export const SectionLogo = styled.section`

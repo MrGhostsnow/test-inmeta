@@ -25,6 +25,10 @@ export const SectionChooseCards = styled.section`
     border-radius: 4px;
     justify-content: space-between;
     align-items: center;
+
+    @media (max-width: 425px) {
+        width: 300px;
+    }
 `;
 
 export const LabelSection = styled.p`
@@ -42,6 +46,9 @@ export const SectionCards = styled.section`
 
     .mySwiper {
         width: 510px;
+        @media (max-width: 425px) {
+            width: 400px;
+        }
     }
 
     .swiper-slide {
