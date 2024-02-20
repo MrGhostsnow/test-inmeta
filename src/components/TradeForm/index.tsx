@@ -12,21 +12,14 @@ import {
   ContainerTradeCards,
   SectionChooseTrade,
   TitleSection,
-  Card,
-  ImageCard,
-  NameCard,
-  DescriptionCard,
   ButtonCreateTrade,
   SectionWarning,
   WarningText,
 } from "./styles";
-
-interface Card {
-  id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-}
+import CardItem from "../CardItem";
+import { createTrade } from "../../api/tradeApi";
+import { fetchUserCards } from "../../api/userCards";
+import Card from "../../interface/Card";
 
 const TradeForm: React.FC = () => {
   const [cardsUser, setCardsUser] = useState<Card[]>([]);
@@ -41,25 +34,16 @@ const TradeForm: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserCards = async () => {
+    const fetchData = async () => {
       try {
-        const token = localStorage.getItem("jwtToken");
-        if (!token) {
-          throw new Error("JWT token not found in localStorage");
-        }
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-        const response = await axios.get(
-          "https://cards-marketplace-api.onrender.com/me",
-          { headers }
-        );
-        setCardsUser(response.data.cards);
+        const userCards = await fetchUserCards();
+        setCardsUser(userCards);
       } catch (error) {
         console.error("Error fetching user cards:", error);
       }
     };
-    fetchUserCards();
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -97,35 +81,7 @@ const TradeForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const token = localStorage.getItem("jwtToken");
-      if (!token) {
-        throw new Error("JWT token not found in localStorage");
-      }
-
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-
-      const requestBody = {
-        cards: [
-          {
-            cardId: offeringCard,
-            type: "OFFERING",
-          },
-          {
-            cardId: receivingCard,
-            type: "RECEIVING",
-          },
-        ],
-      };
-
-      const response = await axios.post(
-        "https://cards-marketplace-api.onrender.com/trades",
-        requestBody,
-        { headers }
-      );
-
-      const tradeId = response.data.tradeId;
+      const tradeId = await createTrade(offeringCard, receivingCard);
       navigate(`/`);
       console.log("Trade created successfully, tradeId:", tradeId);
     } catch (error) {
@@ -137,16 +93,6 @@ const TradeForm: React.FC = () => {
 
   const isFormValid =
     offeringCard !== "" && receivingCard !== "" && !isSubmitting && !loading;
-
-  function reduceDescription(description: string) {
-    const limit = 500;
-    if (description.length <= limit) {
-      return description;
-    } else {
-      const ReduceDescription = description.substring(0, limit) + "...";
-      return ReduceDescription;
-    }
-  }
 
   return (
     <ContainerTrade>
@@ -179,19 +125,11 @@ const TradeForm: React.FC = () => {
             >
               {cardsUser.map((card) => (
                 <SwiperSlide key={card.id}>
-                  <Card key={card.id}>
-                    <input
-                      type="checkbox"
-                      checked={offeringCard === card.id}
-                      onChange={() => handleOfferingCardChange(card.id)}
-                    />
-                    <ImageCard src={card.imageUrl} alt={card.name} />
-                    <NameCard>{card.name}</NameCard>
-                    <DescriptionCard>
-                      {" "}
-                      {reduceDescription(card.description)}
-                    </DescriptionCard>
-                  </Card>
+                  <CardItem
+                    card={card}
+                    selected={offeringCard === card.id}
+                    onSelect={() => handleOfferingCardChange(card.id)}
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -205,18 +143,11 @@ const TradeForm: React.FC = () => {
             >
               {cardsGame.map((card) => (
                 <SwiperSlide key={card.id}>
-                  <Card key={card.id}>
-                    <input
-                      type="checkbox"
-                      checked={receivingCard === card.id}
-                      onChange={() => handleReceivingCardChange(card.id)}
-                    />
-                    <ImageCard src={card.imageUrl} alt={card.name} />
-                    <NameCard>{card.name}</NameCard>
-                    <DescriptionCard>
-                      {reduceDescription(card.description)}
-                    </DescriptionCard>
-                  </Card>
+                  <CardItem
+                    card={card}
+                    selected={receivingCard === card.id}
+                    onSelect={() => handleReceivingCardChange(card.id)}
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>

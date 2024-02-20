@@ -8,6 +8,7 @@ import {
   InputRegister,
   ButtonRegister,
 } from "./styles";
+import { registerUser } from "../../api/registerApi";
 
 const Register: React.FC = () => {
   const [name, setName] = useState<string>("");
@@ -19,31 +20,9 @@ const Register: React.FC = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "https://cards-marketplace-api.onrender.com/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            email,
-            password,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to register user");
-      }
-
-      const data = await response.json();
-      const userId = data.userId;
+      const userId = await registerUser(name, email, password);
       console.log("Registration successful, userId:", userId);
-
-      // Redirecionar para a página de perfil após o registro bem-sucedido
-      navigate("/profile");
+      navigate("/login");
     } catch (error) {
       console.error("Registration failed:", error);
       setError("Failed to register user. Please try again later.");
@@ -54,7 +33,6 @@ const Register: React.FC = () => {
     <ContainerRegister>
       <SectionFormRegister>
         <TitleRegister>Register</TitleRegister>
-        {error && <p>{error}</p>}
         <FormRegister onSubmit={handleRegister}>
           <InputRegister
             type="text"
@@ -86,6 +64,7 @@ const Register: React.FC = () => {
           <ButtonRegister type="submit">Register</ButtonRegister>
         </FormRegister>
       </SectionFormRegister>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </ContainerRegister>
   );
 };

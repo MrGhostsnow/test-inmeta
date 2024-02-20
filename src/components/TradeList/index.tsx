@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { fetchTrades, deleteTrade } from "../../api/cardsApi";
 import axios from "axios";
 import {
   ContainerTradeList,
@@ -15,45 +16,22 @@ import {
   TradeType,
   ButtonDelete,
 } from "./styles";
-
-interface Trade {
-  id: string;
-  userId: string;
-  createdAt: string;
-  user: {
-    name: string;
-  };
-  tradeCards: {
-    id: string;
-    cardId: string;
-    tradeId: string;
-    type: string;
-    card: {
-      id: string;
-      name: string;
-      description: string;
-      imageUrl: string;
-      createdAt: string;
-    };
-  }[];
-}
+import Trade from "../../interface/Trade";
 
 const TradeList: React.FC = () => {
   const [trades, setTrades] = useState<Trade[]>([]);
   const [currentUserId, setCurrentUserId] = useState<string>("");
 
   useEffect(() => {
-    const fetchTrades = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://cards-marketplace-api.onrender.com/trades?rpp=10&page=1"
-        );
-        setTrades(response.data.list);
+        const tradeList = await fetchTrades();
+        setTrades(tradeList);
       } catch (error) {
         console.error("Error fetching trades:", error);
       }
     };
-    fetchTrades();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -85,37 +63,16 @@ const TradeList: React.FC = () => {
       if (!token || token.trim() === "") {
         throw new Error("JWT token not found or empty in localStorage");
       }
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
 
-      const tradeToDelete = trades.find((trade) => trade.id === tradeId);
-      if (!tradeToDelete) {
-        throw new Error("Trade not found");
-      }
-      if (tradeToDelete.userId !== currentUserId) {
-        throw new Error("You are not authorized to delete this trade.");
-      }
-
-      await axios.delete(
-        `https://cards-marketplace-api.onrender.com/trades/${tradeId}`,
-        { headers }
-      );
-
+      await deleteTrade(tradeId, token);
       console.log("Trade deleted successfully");
       setTrades((prevTrades) =>
         prevTrades.filter((trade) => trade.id !== tradeId)
       );
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("HTTP Error deleting trade:", error.response?.status);
-      } else {
-        console.error("Error deleting trade:", error);
-      }
+      console.error("Error deleting trade:", error);
     }
   };
-
-  console.log(trades);
 
   return (
     <ContainerTradeList>

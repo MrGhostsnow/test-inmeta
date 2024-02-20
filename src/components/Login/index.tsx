@@ -9,6 +9,7 @@ import {
   InputLogin,
   ButtonLogin,
 } from "./styles";
+import { login } from "../../api/loginApi";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -19,35 +20,8 @@ const Login: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "https://cards-marketplace-api.onrender.com/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to login");
-      }
-
-      const data = await response.json();
-      const token = data.token;
-      const user = data.user;
-      console.log("Login successful");
-      console.log("JWT token:", token);
-      console.log("User:", user);
-
-      // Armazenar o token JWT no localStorage para autenticação futura
+      const token = await login(email, password);
       localStorage.setItem("jwtToken", token);
-
-      // Redirecionar o usuário para a página de perfil após o login bem-sucedido
       navigate("/profile");
     } catch (error) {
       console.error("Login failed:", error);
@@ -59,26 +33,30 @@ const Login: React.FC = () => {
     <ContainerLogin>
       <SectionFormLogin>
         <TitleLogin>Login</TitleLogin>
-        {error && <p>{error}</p>}
         <FormLogin onSubmit={handleLogin}>
           <ContainerForm>
             <InputLogin
               type="email"
               value={email}
-              onChange={(e: any) => setEmail(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
               placeholder="Email"
               required
             />
             <InputLogin
               type="password"
               value={password}
-              onChange={(e: any) => setPassword(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setPassword(e.target.value)
+              }
               placeholder="Password"
               required
             />
           </ContainerForm>
           <ButtonLogin type="submit">Login</ButtonLogin>
         </FormLogin>
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </SectionFormLogin>
     </ContainerLogin>
   );
