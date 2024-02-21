@@ -8,7 +8,7 @@ O objetivo deste projeto foi desenvolver um aplicativo web responsivo que sirva 
 * O aplicativo inicia com o deck de cartas vazio e permite que o usuário escolha até 10 cartas de um deck aleatório.
 * O usuário pode efetuar a troca de um card de seu deck com um card de um deck aleatório do jogo, quantas vezes quiser.
 * A página inicial do aplicativo mostra as trocas em aberto.
-* A troca pode ser deletada pelo usuário que a criou. (pendente)
+* A troca pode ser deletada pelo usuário que a criou.
 
 ## :wrench: Tecnologias utilizadas
 * React
