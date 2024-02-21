@@ -17,22 +17,31 @@ import {
   ButtonDelete,
 } from "./styles";
 import Trade from "../../interface/Trade";
+import Pagination from "../Pagination";
 
 const TradeList: React.FC = () => {
   const [trades, setTrades] = useState<Trade[]>([]);
   const [currentUserId, setCurrentUserId] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const tradeList = await fetchTrades();
-        setTrades(tradeList);
-      } catch (error) {
-        console.error("Error fetching trades:", error);
-      }
-    };
     fetchData();
-  }, []);
+  }, [currentPage]);
+
+  const fetchData = async () => {
+    try {
+      const fetchedTrades = await fetchTrades(currentPage);
+      setTotalPages(5);
+      setTrades(fetchedTrades);
+    } catch (error) {
+      console.error("Error fetching trades:", error);
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -77,6 +86,7 @@ const TradeList: React.FC = () => {
   return (
     <ContainerTradeList>
       <TitleTradeList>Trade List</TitleTradeList>
+      {trades.length === 0 && <p>No trades found.</p>}
       <SectionTradeList>
         {trades.map((trade) => (
           <SectionCard key={trade.id}>
@@ -106,6 +116,11 @@ const TradeList: React.FC = () => {
           </SectionCard>
         ))}
       </SectionTradeList>
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </ContainerTradeList>
   );
 };

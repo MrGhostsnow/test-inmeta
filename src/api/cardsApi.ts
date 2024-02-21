@@ -11,9 +11,9 @@ export const fetchCards = async (currentPage: number): Promise<any> => {
   }
 };
 
-export const fetchTrades = async (): Promise<any[]> => {
+export const fetchTrades = async (currentPage: number): Promise<any[]> => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/trades?rpp=10&page=1`);
+    const response = await axios.get(`${API_BASE_URL}/trades?rpp=10&page=${currentPage}`);
     return response.data.list;
   } catch (error) {
     console.error("Error fetching trades:", error);

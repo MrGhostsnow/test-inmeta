@@ -25,6 +25,8 @@ export const SectionTradeCards = styled.section`
 
     @media (max-width: 768px) {
         flex-direction: column;
+        border-bottom: 3px solid black;
+        padding-bottom: 2rem;
     }
 `;
 
